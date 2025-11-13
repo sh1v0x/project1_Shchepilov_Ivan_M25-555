@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "project1-shchepilov-ivan-m25-555"
+version = "0.1.0"
+description = ""
+authors = ["sh1v <sh1vvv@yandex.ru>"]
+readme = "README.md"
+
+# Говорим Poetry, что код пакета лежит в папке labyrinth_game
+packages = [
+    { include = "labyrinth_game" },
+]
+
+[tool.poetry.dependencies]
+python = ">=3.10"
+
+[tool.poetry.scripts]
+project = "labyrinth_game.main:main"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
