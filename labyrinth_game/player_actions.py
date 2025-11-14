@@ -1,7 +1,6 @@
-#!/usr/bin/env python3
-
 from .constants import ROOMS
 from .utils import describe_current_room
+
 
 def show_inventory(game_state) -> None:
     inventory = game_state.get("player_inventory", [])
@@ -36,6 +35,10 @@ def move_player(game_state: dict, direction: str) -> None:
 
 def take_item(game_state: dict, item_name: str) -> None:
     """Функция взятия предмета"""
+    if item_name == "treasure_chest":
+        print("Вы не можете поднять сундук, он слишком тяжелый.")
+        return
+    
     current_room = ROOMS[game_state["current_room"]]
     items = current_room.get("items", [])
 

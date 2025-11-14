@@ -1,13 +1,19 @@
 #!/usr/bin/env python3
 
-from .utils import describe_current_room
 from .player_actions import (
-    show_inventory, 
     get_input,
     move_player,
+    show_inventory,
     take_item,
     use_item,
 )
+from .utils import (
+    attempt_open_treasure,
+    describe_current_room,
+    show_help,
+    solve_puzzle,
+)
+
 
 def process_command(game_state: dict, command_line: str) -> None:
     """Обработка команд"""
@@ -43,12 +49,20 @@ def process_command(game_state: dict, command_line: str) -> None:
             else:
                 use_item(game_state, arg)
 
+        case "solve":
+            if game_state["current_room"] == "treasure_room":
+                attempt_open_treasure(game_state)
+            else:
+                solve_puzzle(game_state)
+
+        case "help":
+            show_help()
+
         case "quit" | "exit":
             game_state["game_over"] = True
 
         case _:
             print("Неизвестная команда.")
-
 
 
 def main() -> None:
