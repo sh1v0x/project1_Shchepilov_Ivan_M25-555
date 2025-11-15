@@ -3,6 +3,7 @@ from .utils import describe_current_room, random_event
 
 
 def show_inventory(game_state) -> None:
+    """Показывает предметы в инвентаре"""
     inventory = game_state.get("player_inventory", [])
     if not inventory:
         print('Ваш инвентарь пуст')

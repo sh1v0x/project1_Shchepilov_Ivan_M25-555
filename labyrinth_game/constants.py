@@ -120,3 +120,7 @@ COMMANDS = {
    "help": "показать это сообщение",
    "quit": "выйти из игры",
 }
+
+event_probability_modulo = 10   # используется в функции random_event
+trap_death_threshold = 3        # шанс смерти при пустом инвентаре
+trap_roll_modulo = 10           # диапазон броска в ловушке

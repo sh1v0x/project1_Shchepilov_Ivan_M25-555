@@ -1,9 +1,15 @@
 import math
 
-from .constants import ROOMS
+from .constants import (
+    ROOMS,
+    event_probability_modulo,
+    trap_death_threshold,
+    trap_roll_modulo,
+)
 
 
 def pseudo_random(seed: int, modulo: int) -> int:
+    """Возвращает псевдослучайное число."""
     if modulo <= 0:
         raise ValueError("modulo must be positive")
     
@@ -12,6 +18,7 @@ def pseudo_random(seed: int, modulo: int) -> int:
     return int(frac * modulo)
 
 def trigger_trap(game_state: dict) -> None:
+    """Активация ловушки."""
     print("Ловушка активирована! Пол стал дрожать...")
 
     inventory = game_state["player_inventory"]
@@ -23,10 +30,9 @@ def trigger_trap(game_state: dict) -> None:
         return
     
     game_state["steps_taken"] += 1
-    roll = pseudo_random(game_state["steps_taken"], 10)
+    roll = pseudo_random(game_state["steps_taken"], trap_roll_modulo)
     
-    roll = pseudo_random(game_state["steps_taken"], 10)
-    if roll < 3:
+    if roll < trap_death_threshold:
         print("Пол рассыпается под вами. Вы падаете в темноту...")
         print("Игра окончена.")
         game_state["game_over"] = True
@@ -34,8 +40,9 @@ def trigger_trap(game_state: dict) -> None:
         print("Вы чудом удержались на краю и выжили.")
 
 def random_event(game_state: dict) -> None:
+    """Создается случайное событие при перемещении игрока."""
     seed = game_state["steps_taken"]
-    roll = pseudo_random(seed, 10)
+    roll = pseudo_random(seed, event_probability_modulo)
     if roll != 0:
         return
     
@@ -62,6 +69,7 @@ def random_event(game_state: dict) -> None:
 
 
 def describe_current_room(game_state: dict) -> None:
+    """Показывает описание комнаты."""
     current_room_id = game_state['current_room']
     room = ROOMS[current_room_id]
 
@@ -89,6 +97,7 @@ def describe_current_room(game_state: dict) -> None:
     print()
 
 def show_help(commands: dict) -> None:
+    """Выводит список доступных команд."""
     print("\nДоступные команды:")
     for cmd, description in commands.items():
         print(f"  {cmd:<16} - {description}")
