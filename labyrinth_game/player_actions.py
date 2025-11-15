@@ -28,6 +28,16 @@ def move_player(game_state: dict, direction: str) -> None:
         print("Нельзя пойти в этом направлении.")
         return
     
+    next_room_id = exits[direction]
+
+    if next_room_id == "treasure_room":
+        if "rusty_key" in game_state["player_inventory"]:
+            print("Вы используете найденный ключ, "
+                  "чтобы открыть путь в комнату сокровищ.")
+        else:
+            print("Дверь заперта. Нужен ключ, чтобы пройти дальше.")
+            return
+
     game_state["current_room"] = exits[direction]
     game_state["steps_taken"] += 1
 

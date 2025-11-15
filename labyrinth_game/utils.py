@@ -22,6 +22,9 @@ def trigger_trap(game_state: dict) -> None:
         print(f"Вы теряете предмет: {lost_item}.")
         return
     
+    game_state["steps_taken"] += 1
+    roll = pseudo_random(game_state["steps_taken"], 10)
+    
     roll = pseudo_random(game_state["steps_taken"], 10)
     if roll < 3:
         print("Пол рассыпается под вами. Вы падаете в темноту...")
@@ -85,16 +88,10 @@ def describe_current_room(game_state: dict) -> None:
 
     print()
 
-def show_help():
+def show_help(commands: dict) -> None:
     print("\nДоступные команды:")
-    print("  go <direction>  - перейти в направлении (north/south/east/west)")
-    print("  look            - осмотреть текущую комнату")
-    print("  take <item>     - поднять предмет")
-    print("  use <item>      - использовать предмет из инвентаря")
-    print("  inventory       - показать инвентарь")
-    print("  solve           - попытаться решить загадку в комнате")
-    print("  quit            - выйти из игры")
-    print("  help            - показать это сообщение")
+    for cmd, description in commands.items():
+        print(f"  {cmd:<16} - {description}")
 
 def solve_puzzle(game_state: dict) -> None:
     """Функция решения загадок"""
@@ -110,8 +107,15 @@ def solve_puzzle(game_state: dict) -> None:
 
     print(question)
     user_answer = input("Ваш ответ: ").strip().lower()
+    correct = answer.lower()
 
-    if user_answer == answer.lower():
+    alternatives = {correct}
+    if correct == "10":
+        alternatives.add("десять")
+    if correct == "десять":
+        alternatives.add("10")
+
+    if user_answer in alternatives:
         print("Верно! Загадка решена.")
         room["puzzle"] = None
 
@@ -121,6 +125,8 @@ def solve_puzzle(game_state: dict) -> None:
             print("Вы находите особый ключ: treasure_key")
     else:
         print("Неверно. Попробуйте снова.")
+        if current_room_id == "trap_room":
+            trigger_trap(game_state)
 
 def attempt_open_treasure(game_state: dict) -> None:
     """Открыть сундук сокровищ в комнате сокровищ."""
