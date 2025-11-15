@@ -1,10 +1,10 @@
 import math
 
 from .constants import (
+    EVENT_PROBABILITY_MODULO,
     ROOMS,
-    event_probability_modulo,
-    trap_death_threshold,
-    trap_roll_modulo,
+    TRAP_DEATH_THRESHOLD,
+    TRAP_ROLL_MODULO,
 )
 
 
@@ -30,9 +30,9 @@ def trigger_trap(game_state: dict) -> None:
         return
     
     game_state["steps_taken"] += 1
-    roll = pseudo_random(game_state["steps_taken"], trap_roll_modulo)
+    roll = pseudo_random(game_state["steps_taken"], TRAP_ROLL_MODULO)
     
-    if roll < trap_death_threshold:
+    if roll < TRAP_DEATH_THRESHOLD:
         print("Пол рассыпается под вами. Вы падаете в темноту...")
         print("Игра окончена.")
         game_state["game_over"] = True
@@ -42,7 +42,7 @@ def trigger_trap(game_state: dict) -> None:
 def random_event(game_state: dict) -> None:
     """Создается случайное событие при перемещении игрока."""
     seed = game_state["steps_taken"]
-    roll = pseudo_random(seed, event_probability_modulo)
+    roll = pseudo_random(seed, EVENT_PROBABILITY_MODULO)
     if roll != 0:
         return
     

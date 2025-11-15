@@ -121,6 +121,6 @@ COMMANDS = {
    "quit": "выйти из игры",
 }
 
-event_probability_modulo = 10   # используется в функции random_event
-trap_death_threshold = 3        # шанс смерти при пустом инвентаре
-trap_roll_modulo = 10           # диапазон броска в ловушке
+EVENT_PROBABILITY_MODULO = 10   # используется в функции random_event
+TRAP_DEATH_THRESHOLD = 3        # шанс смерти при пустом инвентаре
+TRAP_ROLL_MODULO = 10           # диапазон броска в ловушке

@@ -21,3 +21,4 @@ make project
 ```
 
 ### Демонстрация игры через asciinema: 
+[![asciicast](https://asciinema.org/a/WRaWsU4LIWUgUmKcnNiPHN9nL.svg)](https://asciinema.org/a/WRaWsU4LIWUgUmKcnNiPHN9nL)
