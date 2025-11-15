@@ -1,5 +1,5 @@
 from .constants import ROOMS
-from .utils import describe_current_room
+from .utils import describe_current_room, random_event
 
 
 def show_inventory(game_state) -> None:
@@ -32,6 +32,8 @@ def move_player(game_state: dict, direction: str) -> None:
     game_state["steps_taken"] += 1
 
     describe_current_room(game_state)
+
+    random_event(game_state)
 
 def take_item(game_state: dict, item_name: str) -> None:
     """Функция взятия предмета"""

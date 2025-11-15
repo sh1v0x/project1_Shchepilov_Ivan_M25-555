@@ -1,4 +1,61 @@
+import math
+
 from .constants import ROOMS
+
+
+def pseudo_random(seed: int, modulo: int) -> int:
+    if modulo <= 0:
+        raise ValueError("modulo must be positive")
+    
+    x = math.sin(seed * 12.9898) * 43758.5453
+    frac = x - math.floor(x)
+    return int(frac * modulo)
+
+def trigger_trap(game_state: dict) -> None:
+    print("Ловушка активирована! Пол стал дрожать...")
+
+    inventory = game_state["player_inventory"]
+
+    if inventory:
+        index = pseudo_random(game_state["steps_taken"], len(inventory))
+        lost_item = inventory.pop(index)
+        print(f"Вы теряете предмет: {lost_item}.")
+        return
+    
+    roll = pseudo_random(game_state["steps_taken"], 10)
+    if roll < 3:
+        print("Пол рассыпается под вами. Вы падаете в темноту...")
+        print("Игра окончена.")
+        game_state["game_over"] = True
+    else:
+        print("Вы чудом удержались на краю и выжили.")
+
+def random_event(game_state: dict) -> None:
+    seed = game_state["steps_taken"]
+    roll = pseudo_random(seed, 10)
+    if roll != 0:
+        return
+    
+    event_type = pseudo_random(seed + 1, 3)
+
+    current_room_id = game_state["current_room"]
+    room = ROOMS[current_room_id]
+    inventory = game_state["player_inventory"]
+
+    if event_type == 0:
+        print("На полу Вы нашли монетку.")
+        room_items = room.setdefault("items", [])
+        room_items.append("coin")
+        print("Монетка теперь лежит в этой комнате")
+    elif event_type == 1:
+        print("Вы слышите какой-то шорох недалеко от вас.")
+        if "sword" in inventory:
+            print("Вы крепче сжали меч - существо отступает во тьму.")
+    elif event_type == 2:
+        if current_room_id == "trap_room" and "torch" not in inventory:
+            print("Что-то щелкнуло под вашими ногами. Это может быть ловушка.")
+            trigger_trap(game_state)
+
 
 
 def describe_current_room(game_state: dict) -> None:
@@ -69,7 +126,7 @@ def attempt_open_treasure(game_state: dict) -> None:
     """Открыть сундук сокровищ в комнате сокровищ."""
     current_room_id = game_state["current_room"]
 
-    if current_room_id == "treasure_room":
+    if current_room_id != "treasure_room":
         print("Здесь ничего не открывали.")
         return
     
@@ -110,3 +167,5 @@ def attempt_open_treasure(game_state: dict) -> None:
         game_state["game_over"] = True
     else:
         print("Неверный код.")
+
+
